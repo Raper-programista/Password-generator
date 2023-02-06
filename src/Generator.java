@@ -9,14 +9,10 @@ public class Generator {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         //main variable
-        String password = new String();
+        StringBuilder password = new StringBuilder();
 
-        //counters
-        int lettersCounter = 0;
-        int numbersCounter = 0;
-        int specCharsCount = 0;
-        // array counter
-        int counters [] = {lettersCounter, numbersCounter, specCharsCount};
+        // [0] -> letters, [1] -> numbers, [2] -> special characters
+        int[] counters = {0, 0, 0};
 
         //arrays
         char[] letters = createTable(65, 122, 'l');
@@ -26,22 +22,16 @@ public class Generator {
         //arrays 2D (dwuwymiarowa tablica)
         char[][] allCharacters = {letters, numbers, specials};
 
-         /* table test
-        * displayTable(letters);
-        * displayTable(numbers);
-        * displayTable(specials);
-         */
-
         // ask user about password
         try {
             System.out.println("How many letters you want in your password: ");
-            lettersCounter = Integer.parseInt(reader.readLine());
+            counters[0] = Integer.parseInt(reader.readLine());
 
             System.out.println("How many numbers you want in your password: ");
-            numbersCounter = Integer.parseInt(reader.readLine());
+            counters[1] = Integer.parseInt(reader.readLine());
 
             System.out.println("How many special characters you want in your password: ");
-            specCharsCount = Integer.parseInt(reader.readLine());
+            counters[2] = Integer.parseInt(reader.readLine());
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -49,17 +39,11 @@ public class Generator {
             System.out.println("Format error, you have entered an incorrect value, ty debilu jebany: " + e);
         }
 
-
-          /* test counter
-         for (int counter : counters)
-            System.out.println(counter);
-          */
-int i =0;
         // create password
-        while (counters[0] > 0 || // lettersCounter
-               counters[1] > 0 || // numbersCounter
-               counters[2] > 0){  // specCharsCount
-                                                         // or while(counters[0] + counters[1] + counters[2] > 0)
+        while (counters[0] > 0 || // or while(counters[0] + counters[1] + counters[2] > 0)
+               counters[1] > 0 ||
+               counters[2] > 0) {
+
 
             //draw a type of characters (array draw)
             int random = new Random().nextInt(0, 3);
@@ -76,26 +60,13 @@ int i =0;
             char sing = allCharacters[random][index];
 
             // concat password
-            password += sing;
+            password.append(sing);
 
             counters[random]--;
         }
 
         System.out.println("Your password is: " + password);
     }
-
-    private static void displayTable(char[] tab) {
-
-        //separator
-        String separator = "-----------------------------------------";
-
-        for (char element : tab)
-            System.out.println(element);
-
-        //separator
-        System.out.println(separator);
-    }
-
     private static char[] createTable(int from, int to, char type) {
 
         //size array
