@@ -1,15 +1,20 @@
+package main;
+
+import javax.annotation.processing.Generated;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Generator {
+    //main variable
+    static StringBuilder password = new StringBuilder();
+
     public static void main(String[] args) {
         // preparing reader from console
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        //main variable
-        StringBuilder password = new StringBuilder();
 
         // [0] -> letters, [1] -> numbers, [2] -> special characters
         int[] counters = {0, 0, 0};
@@ -17,7 +22,7 @@ public class Generator {
         //arrays
         char[] letters = createTable(65, 122, 'l');
         char[] numbers = createTable(48, 57, 'n');
-        char[] specials = createTable(21, 47, 's');
+        char[] specials = createTable(33, 125, 's');
 
         //arrays 2D (dwuwymiarowa tablica)
         char[][] allCharacters = {letters, numbers, specials};
@@ -36,7 +41,7 @@ public class Generator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (NumberFormatException e){
-            System.out.println("Format error, you have entered an incorrect value, ty debilu jebany: " + e);
+            System.out.println("Format error, you have entered an incorrect value: " + e);
         }
 
         // create password
@@ -69,16 +74,34 @@ public class Generator {
     }
     private static char[] createTable(int from, int to, char type) {
 
-        //size array
-        int size = to-from+1;
+        ArrayList<Character> list = new ArrayList<>();
 
-        //create empty table
-        char[] table = new char[size];
+        for (int i = from; i<=to; i++){
 
-        //tall in the table
-        for(int i =0; i < size; i++ )
-            table[i] = (char) (from+i); // (char) - convert from char to int
+            if(type == 'l' && i>90 && i<97)
+                continue;
+            if(type == 's' && i>47 && i<58)
+                continue;
+            if(type == 's' && ((i>64 && i<91) || (i>96 && i<123 )))
+                continue;
+
+            list.add((char) i);
+
+                /* characters test
+              * System.out.println(i + " : " +(char) i);
+                */
+        }
+
+        char[] table = new char[list.size()];
+
+        for (int i = 0; i < list.size(); i++)
+            table[i] = list.get(i);
 
         return table;
+    }
+
+    public String generate() {
+        return ""+password;
+
     }
 }
